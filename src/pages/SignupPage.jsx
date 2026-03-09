@@ -4,6 +4,23 @@ import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
+// Move InputField OUTSIDE the main component to prevent focus loss on re-render
+const InputField = ({ label, placeholder, type = "text", field, required = true, value, onChange }) => (
+  <div className="relative border border-[#CBCBCB] rounded-[6px] px-3 py-2 bg-white">
+    <label className="absolute -top-3 left-3 bg-[#F7F8F9] px-1 text-[13px] text-[#6C25FF] font-medium">
+      {label}{required && <span className="text-[#DD4A3D]">*</span>}
+    </label>
+    <input 
+      type={type} 
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e, field)}
+      autoComplete="off"
+      className="w-full text-[14px] text-[#1D2226] outline-none placeholder:text-[#919191] bg-transparent pt-1"
+    />
+  </div>
+);
+
 function SignupPage() {
   const navigate = useNavigate();
   const [isAgency, setIsAgency] = useState('yes');
@@ -18,7 +35,7 @@ function SignupPage() {
   const [error, setError] = useState('');
 
   const handleInputChange = (e, field) => {
-    setFormData({ ...formData, [field]: e.target.value });
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
   };
 
   const handleSignup = async () => {
@@ -31,14 +48,11 @@ function SignupPage() {
     setError('');
 
     try {
-      // 1. Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const user = userCredential.user;
 
-      // 2. Update Auth Profile with Name
       await updateProfile(user, { displayName: formData.fullName });
 
-      // 3. Store extra info in Firestore
       await setDoc(doc(db, "users", user.uid), {
         fullName: formData.fullName,
         phone: formData.phone,
@@ -56,21 +70,6 @@ function SignupPage() {
     }
   };
 
-  const InputField = ({ label, placeholder, type = "text", field, required = true }) => (
-    <div className="relative border border-[#CBCBCB] rounded-[6px] px-3 py-2 bg-white">
-      <label className="absolute -top-3 left-3 bg-[#F7F8F9] px-1 text-[13px] text-[#6C25FF] font-medium">
-        {label}{required && <span className="text-[#DD4A3D]">*</span>}
-      </label>
-      <input 
-        type={type} 
-        placeholder={placeholder}
-        value={formData[field]}
-        onChange={(e) => handleInputChange(e, field)}
-        className="w-full text-[14px] text-[#1D2226] outline-none placeholder:text-[#919191] bg-transparent pt-1"
-      />
-    </div>
-  );
-
   return (
     <div className="flex flex-col p-6 h-full relative" style={{ background: '#F7F8F9' }}>
       <div className="mt-4 mb-8">
@@ -82,11 +81,44 @@ function SignupPage() {
       {error && <p className="text-red-500 text-xs mb-4">{error}</p>}
 
       <div className="flex flex-col gap-6 pb-32">
-        <InputField label="Full Name" placeholder="Marry Doe" field="fullName" />
-        <InputField label="Phone number" placeholder="Marry Doe" field="phone" />
-        <InputField label="Email address" placeholder="Marry Doe" type="email" field="email" />
-        <InputField label="Password" placeholder="Marry Doe" type="password" field="password" />
-        <InputField label="Company name" placeholder="Marry Doe" field="company" required={false} />
+        <InputField 
+          label="Full Name" 
+          placeholder="Marry Doe" 
+          field="fullName" 
+          value={formData.fullName} 
+          onChange={handleInputChange} 
+        />
+        <InputField 
+          label="Phone number" 
+          placeholder="9999999999" 
+          field="phone" 
+          value={formData.phone} 
+          onChange={handleInputChange} 
+        />
+        <InputField 
+          label="Email address" 
+          placeholder="marry@gmail.com" 
+          type="email" 
+          field="email" 
+          value={formData.email} 
+          onChange={handleInputChange} 
+        />
+        <InputField 
+          label="Password" 
+          placeholder="••••••••" 
+          type="password" 
+          field="password" 
+          value={formData.password} 
+          onChange={handleInputChange} 
+        />
+        <InputField 
+          label="Company name" 
+          placeholder="PopX Agency" 
+          field="company" 
+          required={false} 
+          value={formData.company} 
+          onChange={handleInputChange} 
+        />
 
         <div className="flex flex-col gap-2">
           <p className="text-[13px] text-[#1D2226] font-medium">
@@ -123,7 +155,7 @@ function SignupPage() {
         <button 
           onClick={handleSignup}
           disabled={loading}
-          className={`w-full bg-[#6C25FF] text-white py-3.5 rounded-[6px] text-center text-[16px] font-medium transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
+          className={`w-full bg-[#6C25FF] text-white py-3.5 rounded-[6px] text-center text-[16px] font-medium transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90 active:scale-95'}`}
         >
           {loading ? 'Creating...' : 'Create Account'}
         </button>

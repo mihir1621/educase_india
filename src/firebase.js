@@ -2,22 +2,20 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics";
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration using Vite environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyDagNSvVPIO-9Ds-Cws32lfBzQyJ-pCYbs",
-  authDomain: "educaseindia-4b538.firebaseapp.com",
-  projectId: "educaseindia-4b538",
-  storageBucket: "educaseindia-4b538.firebasestorage.app",
-  messagingSenderId: "279631188023",
-  appId: "1:279631188023:web:145fc69944f0e42b4eafb2",
-  measurementId: "G-X8XLS06XMF"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
