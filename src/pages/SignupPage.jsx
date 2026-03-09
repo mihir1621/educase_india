@@ -35,11 +35,15 @@ function SignupPage() {
   const [error, setError] = useState('');
 
   const handleInputChange = (e, field) => {
-    setFormData(prev => ({ ...prev, [field]: e.target.value }));
+    let val = e.target.value;
+    if (field === 'phone') {
+      val = val.replace(/\D/g, '').slice(0, 10);
+    }
+    setFormData(prev => ({ ...prev, [field]: val }));
   };
 
   const handleSignup = async () => {
-    if (!formData.email || !formData.password || !formData.fullName) {
+    if (!formData.email || !formData.password || !formData.fullName || !formData.phone) {
       setError("Please fill in all required fields.");
       return;
     }
@@ -53,9 +57,12 @@ function SignupPage() {
 
       await updateProfile(user, { displayName: formData.fullName });
 
+      // Save phone with standard +91 format
+      const formattedPhone = `+91 ${formData.phone}`;
+
       await setDoc(doc(db, "users", user.uid), {
         fullName: formData.fullName,
-        phone: formData.phone,
+        phone: formattedPhone,
         company: formData.company,
         isAgency: isAgency === 'yes',
         email: formData.email,
@@ -95,13 +102,22 @@ function SignupPage() {
           value={formData.fullName} 
           onChange={handleInputChange} 
         />
-        <InputField 
-          label="Phone number" 
-          placeholder="9999999999" 
-          field="phone" 
-          value={formData.phone} 
-          onChange={handleInputChange} 
-        />
+        
+        {/* Adjusted Phone Input with fixed +91 */}
+        <div className="relative border border-[#CBCBCB] rounded-[6px] px-3 py-2 bg-white flex items-center">
+          <label className="absolute -top-3 left-3 bg-[#F7F8F9] px-1 text-[13px] text-[#6C25FF] font-medium">
+            Phone number<span className="text-[#DD4A3D]">*</span>
+          </label>
+          <span className="text-[14px] text-[#1D2226] font-medium pt-1 mr-1">+91</span>
+          <input 
+            type="text" 
+            placeholder="1234567890" 
+            value={formData.phone}
+            onChange={(e) => handleInputChange(e, 'phone')}
+            className="w-full text-[14px] text-[#1D2226] outline-none placeholder:text-[#919191] bg-transparent pt-1"
+          />
+        </div>
+
         <InputField 
           label="Email address" 
           placeholder="marry@gmail.com" 

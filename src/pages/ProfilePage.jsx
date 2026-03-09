@@ -6,6 +6,37 @@ import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
+const ProfileSkeleton = () => (
+  <div className="flex flex-col h-full bg-[#F7F8F9]">
+    <div className="bg-white px-6 py-5 shadow-sm border-b border-[#CBCBCB] border-dashed flex justify-between items-center">
+      <div className="h-6 w-32 skeleton rounded"></div>
+      <div className="h-4 w-12 skeleton rounded"></div>
+    </div>
+    <div className="p-6">
+      <div className="flex gap-4 items-center mb-6">
+        <div className="w-[76px] h-[76px] skeleton rounded-full"></div>
+        <div className="flex flex-col gap-2">
+          <div className="h-5 w-24 skeleton rounded"></div>
+          <div className="h-4 w-32 skeleton rounded"></div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2 mb-8 border-b border-[#CBCBCB] border-dashed pb-6">
+        <div className="h-4 w-full skeleton rounded"></div>
+        <div className="h-4 w-full skeleton rounded"></div>
+        <div className="h-4 w-2/3 skeleton rounded"></div>
+        <div className="flex flex-col gap-3 mt-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="flex justify-between">
+              <div className="h-4 w-16 skeleton rounded"></div>
+              <div className="h-4 w-24 skeleton rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 function ProfilePage() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -36,11 +67,7 @@ function ProfilePage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-[#6C25FF] font-medium animate-pulse">Loading profile...</p>
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
 
   return (
@@ -49,10 +76,8 @@ function ProfilePage() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col h-full" 
-      style={{ background: '#F7F8F9' }}
+      className="flex flex-col h-full bg-[#F7F8F9]"
     >
-      {/* Header bar */}
       <div className="bg-white px-6 py-5 shadow-sm border-b border-[#CBCBCB] border-dashed flex justify-between items-center">
         <h2 className="text-[18px] font-medium text-[#1D2226]">
           Account Settings
