@@ -8,21 +8,24 @@ import ProfilePage from './pages/ProfilePage';
 function App() {
   return (
     <Router>
-      {/* Outer container to center the mobile screen horizontally and vertically */}
-      <div className="min-h-screen w-full bg-[#E5E5E5] flex items-center justify-center p-4 font-sans antialiased">
+      {/* Container to center the project layout screen */}
+      <div className="min-h-screen w-full bg-[#E5E5E5] flex items-center justify-center p-4">
         
-        {/* Mobile-Style Container matching precisely requested specs */}
+        {/* The Project Screen: Strictly 375px x 812px */}
         <div 
           style={{
             width: '375px',
             height: '812px',
-            background: '#F7F8F9',
+            background: '#F7F8F9 0% 0% no-repeat padding-box',
+            opacity: '1',
             position: 'relative',
+            top: '0px',
+            left: '0px',
           }}
-          className="shadow-2xl overflow-hidden rounded-[20px] bg-[#F7F8F9] border border-gray-300"
+          className="shadow-lg overflow-hidden flex flex-col"
         >
-          {/* Main App Content with Routing */}
-          <div className="h-full overflow-y-auto hide-scrollbar">
+          {/* Main Content Area */}
+          <div className="flex-1 overflow-y-auto hide-scrollbar">
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -31,7 +34,7 @@ function App() {
             </Routes>
           </div>
 
-          {/* Simple scrollbar hiding style inside the component */}
+          {/* Scrollbar reset within the 375x812 container */}
           <style dangerouslySetInnerHTML={{ __html: `
             .hide-scrollbar::-webkit-scrollbar {
               display: none;
