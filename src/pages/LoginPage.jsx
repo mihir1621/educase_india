@@ -182,7 +182,7 @@ function LoginPage() {
     } catch (err) {
       console.error(err);
       if (err.code !== 'auth/popup-closed-by-user') {
-        setError("Failed to sign in with Google.");
+        setError(`Google Login Error: ${err.message}`);
       }
     } finally {
       setLoading(false);

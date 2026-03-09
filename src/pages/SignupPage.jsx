@@ -115,7 +115,7 @@ function SignupPage() {
     } catch (err) {
       console.error(err);
       if (err.code !== 'auth/popup-closed-by-user') {
-        setError("Failed to sign up with Google.");
+        setError(`Google Signup Error: ${err.message}`);
       }
     } finally {
       setLoading(false);
