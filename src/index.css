@@ -3,28 +3,51 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Rubik', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --font-rubik: 'Rubik', sans-serif;
+  
+  /* ORIGINAL LIGHT THEME COLORS */
+  --bg-main: #F7F8F9;
+  --bg-surface: #FFFFFF;
+  --primary: #6C25FF;
+  --secondary: #CEBAFB; 
+  --text-main: #1D2226;
+  --text-sub: #6D7278; /* Added back */
+  --border-color: #CBCBCB;
+}
+
+:root.dark {
+  /* DARK THEME */
+  --bg-main: #121212;
+  --bg-surface: #1E1E1E;
+  --primary: #CEBAFB; 
+  --secondary: #2D2D2D;
+  --text-main: #F7F8F9;
+  --text-sub: #A0A0A0; /* Added back */
+  --border-color: #3D3D3D;
 }
 
 body {
   margin: 0;
-  background-color: #f3f4f6; /* Default background */
-  font-family: 'Rubik', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-rubik);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, 
+    var(--bg-main) 25%, 
+    var(--border-color) 50%, 
+    var(--bg-main) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
 }
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
