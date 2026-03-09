@@ -1,9 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function LandingPage() {
   return (
-    <div 
+    <motion.div 
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3 }}
       className="flex flex-col justify-end p-6 h-full"
       style={{ background: '#F7F8F9' }}
     >
@@ -30,7 +35,7 @@ function LandingPage() {
           Already Registered? Login
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

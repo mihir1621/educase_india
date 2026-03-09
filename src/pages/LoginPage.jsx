@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { motion } from 'framer-motion';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -31,7 +32,14 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col p-6 h-full" style={{ background: '#F7F8F9' }}>
+    <motion.div 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col p-6 h-full" 
+      style={{ background: '#F7F8F9' }}
+    >
       <div className="mt-4 mb-10">
         <h1 className="text-[28px] font-medium text-[#1D2226] leading-tight mb-2">
           Signin to your <br />PopX account
@@ -73,12 +81,12 @@ function LoginPage() {
         <button 
           onClick={handleLogin}
           disabled={loading}
-          className={`w-full ${email && password ? 'bg-[#6C25FF]' : 'bg-[#CBCBCB]'} text-white py-3.5 rounded-[6px] text-center text-[16px] font-medium transition-all ${loading ? 'opacity-50' : 'hover:opacity-90'}`}
+          className={`w-full ${email && password ? 'bg-[#6C25FF]' : 'bg-[#CBCBCB]'} text-white py-3.5 rounded-[6px] text-center text-[16px] font-medium transition-all ${loading ? 'opacity-50' : 'hover:opacity-90 active:scale-95'}`}
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -4,6 +4,7 @@ import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -15,7 +16,6 @@ function ProfilePage() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        // Fetch extra data from Firestore
         const docRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -38,13 +38,20 @@ function ProfilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-[#6C25FF] font-medium">Loading profile...</p>
+        <p className="text-[#6C25FF] font-medium animate-pulse">Loading profile...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ background: '#F7F8F9' }}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col h-full" 
+      style={{ background: '#F7F8F9' }}
+    >
       {/* Header bar */}
       <div className="bg-white px-6 py-5 shadow-sm border-b border-[#CBCBCB] border-dashed flex justify-between items-center">
         <h2 className="text-[18px] font-medium text-[#1D2226]">
@@ -105,7 +112,7 @@ function ProfilePage() {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

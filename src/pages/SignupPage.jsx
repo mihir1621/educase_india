@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { motion } from 'framer-motion';
 
-// Move InputField OUTSIDE the main component to prevent focus loss on re-render
 const InputField = ({ label, placeholder, type = "text", field, required = true, value, onChange }) => (
   <div className="relative border border-[#CBCBCB] rounded-[6px] px-3 py-2 bg-white">
     <label className="absolute -top-3 left-3 bg-[#F7F8F9] px-1 text-[13px] text-[#6C25FF] font-medium">
@@ -71,7 +71,14 @@ function SignupPage() {
   };
 
   return (
-    <div className="flex flex-col p-6 h-full relative" style={{ background: '#F7F8F9' }}>
+    <motion.div 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col p-6 h-full relative" 
+      style={{ background: '#F7F8F9' }}
+    >
       <div className="mt-4 mb-8">
         <h1 className="text-[28px] font-medium text-[#1D2226] leading-tight mb-2">
           Create your <br />PopX account
@@ -160,7 +167,7 @@ function SignupPage() {
           {loading ? 'Creating...' : 'Create Account'}
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
